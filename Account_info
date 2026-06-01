@@ -1,0 +1,102 @@
+
+
+import pandas as pd
+import os
+
+
+folder = os.path.dirname(os.path.abspath(__file__))
+filepath = os.path.join(folder, "accounts.csv")
+
+if os.path.exists(filepath):
+    accounts = pd.read_csv(filepath).to_dict("records")
+    print(f"Loaded {len(accounts)} existing accounts from CSV")
+else:
+    accounts = []
+    print("No existing CSV found, starting fresh")
+    
+    
+    
+    
+def add_account():
+    global accounts
+    
+    name = input("\n Please enter your name \n")
+    age = input("\n Please enter your age \n")
+    email = input("\n Please enter an Email \n")
+    phone = input("\n Please enter a phone number \n")
+    
+    account = {"Name": name, "Age": age, "Email": email, "Phone": phone,}
+    accounts.append(account)
+    pd.DataFrame(accounts).to_csv(filepath, index=False)
+    print(f"\n {name} has been saved as contact")
+    
+    
+    
+    
+    
+def search_account():
+    global accounts
+    
+    search = input("\nPlease enter a Name\n")
+    for account in accounts:
+        if account["Name"].lower() == search.lower():
+            print(f"\nName: {accounts['Name']}")
+            print(f"Age: {account['Age']}")
+            print(f"Email: {account['Email']}")
+            print(f"Phone: {account['Phone']}")
+            return
+    print("account not found")
+    
+    
+    
+    
+    
+    
+def delete_account():
+    global accounts
+    
+    search = input("\nPlease enter a contact name to delete\n")
+    for account in accounts:
+        if account["Name"].lower() == search.lower():
+            accounts.remove(account)
+    print("Contact deleted")
+
+    
+    
+    
+    
+def view_all():
+    df = pd.DataFrame(accounts)
+    print(df)
+    
+    
+    
+    
+def exit_program():
+    pd.DataFrame(accounts).to_csv(filepath, index=False)
+    print("Goodbye! ✅")
+    exit()
+    
+    
+    
+    
+    
+while True:
+    print("\n1. Add Contact")
+    print("2. Search Contact")
+    print("3. Delete Contact")
+    print("4. View All")
+    print("5. Exit")
+    
+    choice = input("\nChoose an option: ")
+    
+    if choice == "1":
+        add_account()
+    elif choice == "2":
+        search_account()
+    elif choice == "3":
+        delete_account()
+    elif choice == "4":
+        view_all()
+    elif choice == "5":
+        exit_program()
